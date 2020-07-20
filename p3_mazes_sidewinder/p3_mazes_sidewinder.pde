@@ -21,8 +21,8 @@ class BinaryTree {
     for( Cell c : gc )
     {
       ArrayList<Cell> neighbors = new ArrayList<Cell>();
-      if( c.up != null)
-        neighbors.add(c.up);
+      if( c.down != null)
+        neighbors.add(c.down);
       if( c.right != null)
         neighbors.add(c.right);
         
@@ -98,19 +98,19 @@ class Grid {
     strokeWeight(2);
     int MARGIN = 50;
     int LEFT = MARGIN, TOP = MARGIN, RIGHT = width - MARGIN, BOTTOM = height - MARGIN;
-    int STEP_H = (BOTTOM - TOP) / cells[0].length;
-    int STEP_W = (RIGHT - LEFT) / cells.length;
+    int STEP_H = (BOTTOM - TOP) / cells.length;
+    int STEP_W = (RIGHT - LEFT) / cells[0].length;
     for( int h = 0; h < cells.length ; h++ ){
       for( int w = 0 ; w < cells[0].length; w++ ){
-        PVector origin = new PVector(TOP + STEP_H * h, LEFT + STEP_W * w);
+        PVector origin = new PVector(LEFT + STEP_W * w, TOP + STEP_H * h);
         Cell current_cell = cells[h][w];
-        if( current_cell.up == null )
+        if( current_cell.up == null || current_cell.links().contains(current_cell.up))
           line(origin.x, origin.y, origin.x+STEP_W, origin.y);
-        if( current_cell.down == null )
+        if( current_cell.down == null || current_cell.links().contains(current_cell.down))
           line(origin.x, origin.y+STEP_H, origin.x+STEP_W, origin.y+STEP_H);
-        if( current_cell.left == null )
+        if( current_cell.left == null || current_cell.links().contains(current_cell.left))
           line(origin.x, origin.y, origin.x, origin.y+STEP_H);
-        if( current_cell.right == null )
+        if( current_cell.right == null || current_cell.links().contains(current_cell.right))
           line(origin.x+STEP_W, origin.y, origin.x+STEP_W, origin.y+STEP_H);
       }
     }

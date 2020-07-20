@@ -10,7 +10,8 @@ void setup(){
 }
 
 void draw() {
-  background(0);
+  background(0); //<>//
+  g.onDraw();
 }
 
 
@@ -25,11 +26,11 @@ class BinaryTree {
       if( c.right != null)
         neighbors.add(c.right);
         
-      int index = (int) random(neighbors.size());
-      Cell newNeighbor = neighbors.get(index);
-      
-      c.link(newNeighbor, true);
-      
+      if( neighbors.size() > 0 ) {
+        int index = (int) random(neighbors.size());
+        Cell newNeighbor = neighbors.get(index);
+        c.link(newNeighbor, true);
+      }
     }
   }
 }
@@ -46,7 +47,7 @@ class Grid {
   Cell get(int h, int w){
     if( h <= 0 || h > cells.length - 1)
       return null;
-    if( w <= 0 || h > cells[0].length - 1)
+    if( w <= 0 || w > cells[0].length - 1)
       return null; 
     return cells[h][w];
   }
@@ -57,9 +58,9 @@ class Grid {
   
   Cell[] eachCell() {
     Cell[] retVal = new Cell[cells.length*cells[0].length];
-    for( int h = cells.length; h < cells.length ; h++ ) //<>//
+    for( int h = 0; h < cells.length ; h++ )
     {
-      for( int w = cells[0].length ; w < cells[0].length; w++ ){
+      for( int w = 0 ; w < cells[0].length; w++ ){
         retVal[h*cells[0].length + w] = cells[h][w];
       }
     }
@@ -72,7 +73,7 @@ class Grid {
   }
   
   void prepare(){
-    for( int h = 0; h < cells.length ; h++ ) //<>//
+    for( int h = 0; h < cells.length ; h++ )
     {
       for( int w = 0 ; w < cells[0].length; w++ ){
         cells[h][w] = new Cell(h, w);
@@ -81,9 +82,9 @@ class Grid {
   }
   
   void configure() {
-    for( int h = cells.length; h < cells.length ; h++ )
+    for( int h = 0; h < cells.length ; h++ )
     {
-      for( int w = cells[0].length ; w < cells[0].length; w++ ){
+      for( int w = 0 ; w < cells[0].length; w++ ){
         cells[h][w].up = this.get(h-1,w);
         cells[h][w].down = this.get(h+1,w);
         cells[h][w].left = this.get(h,w-1);
@@ -93,6 +94,26 @@ class Grid {
   }
   
   void onDraw(){
+    stroke(255);
+    strokeWeight(2);
+    int MARGIN = 50;
+    int LEFT = MARGIN, TOP = MARGIN, RIGHT = width - MARGIN, BOTTOM = height - MARGIN;
+    int STEP_H = (BOTTOM - TOP) / cells[0].length;
+    int STEP_W = (RIGHT - LEFT) / cells.length;
+    for( int h = 0; h < cells.length ; h++ ){
+      for( int w = 0 ; w < cells[0].length; w++ ){
+        PVector origin = new PVector(TOP + STEP_H * h, LEFT + STEP_W * w);
+        Cell current_cell = cells[h][w];
+        if( current_cell.up == null )
+          line(origin.x, origin.y, origin.x+STEP_W, origin.y);
+        if( current_cell.down == null )
+          line(origin.x, origin.y+STEP_H, origin.x+STEP_W, origin.y+STEP_H);
+        if( current_cell.left == null )
+          line(origin.x, origin.y, origin.x, origin.y+STEP_H);
+        if( current_cell.right == null )
+          line(origin.x+STEP_W, origin.y, origin.x+STEP_W, origin.y+STEP_H);
+      }
+    }
     
   }
 }

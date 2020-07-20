@@ -1,15 +1,39 @@
 import java.util.Set;
+import java.util.Iterator;
 
 Grid g;
 
 void setup(){
   size(800,600);
   g = new Grid(8, 6);
+  (new BinaryTree()).on(g);
 }
 
 void draw() {
   background(0);
 }
+
+
+class BinaryTree {
+  void on(Grid g){
+    Cell[] gc = g.eachCell();
+    for( Cell c : gc )
+    {
+      ArrayList<Cell> neighbors = new ArrayList<Cell>();
+      if( c.up != null)
+        neighbors.add(c.up);
+      if( c.right != null)
+        neighbors.add(c.right);
+        
+      int index = (int) random(neighbors.size());
+      Cell newNeighbor = neighbors.get(index);
+      
+      c.link(newNeighbor, true);
+      
+    }
+  }
+}
+
 
 class Grid {
   Cell[][] cells;
@@ -31,14 +55,26 @@ class Grid {
     return cells[(int)random(cells.length)][(int)random(cells[0].length)];
   }
   
+  Cell[] eachCell() {
+    Cell[] retVal = new Cell[cells.length*cells[0].length];
+    for( int h = cells.length; h < cells.length ; h++ ) //<>//
+    {
+      for( int w = cells[0].length ; w < cells[0].length; w++ ){
+        retVal[h*cells[0].length + w] = cells[h][w];
+      }
+    }
+    return retVal;
+  }
+  
+  
   int size() {
      return cells.length * cells[0].length;
   }
   
   void prepare(){
-    for( int h = cells.length; h < cells.length ; h++ )
+    for( int h = 0; h < cells.length ; h++ ) //<>//
     {
-      for( int w = cells[0].length ; w < cells[0].length; w++ ){
+      for( int w = 0 ; w < cells[0].length; w++ ){
         cells[h][w] = new Cell(h, w);
       }
     }

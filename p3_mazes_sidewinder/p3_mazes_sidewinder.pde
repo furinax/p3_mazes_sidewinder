@@ -45,9 +45,9 @@ class Grid {
   }
   
   Cell get(int h, int w){
-    if( h <= 0 || h > cells.length - 1)
+    if( h < 0 || h > cells.length - 1)
       return null;
-    if( w <= 0 || w > cells[0].length - 1)
+    if( w < 0 || w > cells[0].length - 1)
       return null; 
     return cells[h][w];
   }
@@ -104,13 +104,13 @@ class Grid {
       for( int w = 0 ; w < cells[0].length; w++ ){
         PVector origin = new PVector(LEFT + STEP_W * w, TOP + STEP_H * h);
         Cell current_cell = cells[h][w];
-        if( current_cell.up == null || current_cell.links().contains(current_cell.up))
+        if( current_cell.up == null || !current_cell.links().contains(current_cell.up))
           line(origin.x, origin.y, origin.x+STEP_W, origin.y);
-        if( current_cell.down == null || current_cell.links().contains(current_cell.down))
+        if( current_cell.down == null || !current_cell.links().contains(current_cell.down))
           line(origin.x, origin.y+STEP_H, origin.x+STEP_W, origin.y+STEP_H);
-        if( current_cell.left == null || current_cell.links().contains(current_cell.left))
+        if( current_cell.left == null || !current_cell.links().contains(current_cell.left))
           line(origin.x, origin.y, origin.x, origin.y+STEP_H);
-        if( current_cell.right == null || current_cell.links().contains(current_cell.right))
+        if( current_cell.right == null || !current_cell.links().contains(current_cell.right))
           line(origin.x+STEP_W, origin.y, origin.x+STEP_W, origin.y+STEP_H);
       }
     }

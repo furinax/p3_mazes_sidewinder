@@ -5,8 +5,8 @@ Grid g;
 
 void setup(){
   size(800,600);
-  g = new Grid(8, 6);
-  (new BinaryTree()).on(g);
+  g = new Grid(80, 60);
+  (new SideWinder()).on(g);
 }
 
 void draw() {
@@ -15,22 +15,32 @@ void draw() {
 }
 
 
-class BinaryTree {
+class SideWinder {
   void on(Grid g){
-    Cell[] gc = g.eachCell();
-    for( Cell c : gc )
+    for( Cell[] row : g.cells )
     {
-      ArrayList<Cell> neighbors = new ArrayList<Cell>();
-      if( c.down != null)
-        neighbors.add(c.down);
-      if( c.right != null)
-        neighbors.add(c.right);
-        
-      if( neighbors.size() > 0 ) {
-        int index = (int) random(neighbors.size());
-        Cell newNeighbor = neighbors.get(index);
-        c.link(newNeighbor, true);
-      }
+      ArrayList<Cell> run = new ArrayList<Cell>();
+       for( Cell cell : row )
+       {
+         run.add(cell);
+         
+          boolean isRight = cell.right == null, isUp = cell.up == null;
+          
+          boolean isCloseRow = isRight || (!isUp && ((int) random(2) == 0));
+          
+          if( isCloseRow )
+          {
+            Cell member = run.get((int) random(run.size()));
+            if( member.up != null )
+              member.link(member.up, true);
+            run.clear();
+          }
+          else
+          {
+            cell.link(cell.right, true);
+          }
+          
+       }
     }
   }
 }
